@@ -446,7 +446,6 @@ class CouponViewSet(EdxOrderPlacementMixin, viewsets.ModelViewSet):
             )
             Invoice.objects.filter(order__basket=baskets.first()).update(business_client=client)
             coupon.attr.enterprise_customer_uuid = enterprise_customer
-            coupon.save()
 
         coupon_price = request_data.get('price')
         if coupon_price:
@@ -455,11 +454,14 @@ class CouponViewSet(EdxOrderPlacementMixin, viewsets.ModelViewSet):
         note = request_data.get('note')
         if note is not None:
             coupon.attr.note = note
-            coupon.save()
 
         if 'notify_email' in request_data:
             coupon.attr.notify_email = request_data.get('notify_email')
-            coupon.save()
+
+        if 'inactive' in request_data:
+            coupon.attr.inactive = request_data.get('inactive')
+
+        coupon.save()
 
     def update_offer_data(self, request_data, vouchers, site):
         """

@@ -43,6 +43,15 @@ define([
             ],
 
             couponBindings: {
+                'input[name=inactive]': {
+                    observe: 'inactive',
+                    onGet: function(val) {
+                        return val ? 'inactive' : 'active';
+                    },
+                    onSet: function(val) {
+                        return val === 'inactive';
+                    }
+                },
                 'select[name=enterprise_customer]': {
                     observe: 'enterprise_customer',
                     selectOptions: {
@@ -158,6 +167,7 @@ define([
                     'enterprise_customer',
                     'enterprise_customer_catalog',
                     'notify_email',
+                    'inactive',
                     'invoice_discount_type',
                     'invoice_discount_value',
                     'invoice_number',
