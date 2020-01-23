@@ -17,7 +17,7 @@ ENV LC_ALL en_US.UTF-8
 ADD . /openedx/ecommerce
 WORKDIR /openedx/ecommerce
 
-RUN make production-requirements && pip3 install xmlsec==1.3.3
+RUN make production-requirements && pip install xmlsec==1.3.3
 
 EXPOSE 8000
 CMD gunicorn --name ecommerce --bind=0.0.0.0:8000 --max-requests=1000 --workers ${WORKER_COUNT:-1} ecommerce.wsgi:application
