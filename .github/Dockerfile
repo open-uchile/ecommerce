@@ -15,9 +15,10 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 ADD . /openedx/ecommerce
+ADD ./.github/assets.py /openedx/ecommerce/ecommerce/settings/assets.py
 WORKDIR /openedx/ecommerce
 
-RUN make production-requirements && pip install xmlsec==1.3.3 python-json-logger==0.1.11 && make static
+RUN make production-requirements && pip install xmlsec==1.3.3 python-json-logger==0.1.11 && DJANGO_SETTINGS_MODULE=ecommerce.settings.assets make static
 
 EXPOSE 8000
 CMD gunicorn --name ecommerce --bind=0.0.0.0:8000 --max-requests=1000 --workers ${WORKER_COUNT:-1} ecommerce.wsgi:application
