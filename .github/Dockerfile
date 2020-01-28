@@ -16,6 +16,7 @@ ENV LC_ALL en_US.UTF-8
 
 ADD . /openedx/ecommerce
 ADD ./.github/assets.py /openedx/ecommerce/ecommerce/settings/assets.py
+ADD ./.github/themes/ /openedx/ecommerce/ecommerce/themes
 WORKDIR /openedx/ecommerce
 
 RUN make production-requirements && pip install xmlsec==1.3.3 python-json-logger==0.1.11 && DJANGO_SETTINGS_MODULE=ecommerce.settings.assets make static
