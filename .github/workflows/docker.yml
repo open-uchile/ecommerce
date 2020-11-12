@@ -7,9 +7,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: eol/juniper.master
+      - uses: actions/checkout@master
 
       - name: Build Docker image
         run: docker build . --file .github/Dockerfile --tag eoluchile/ecommerce-juniper:${GITHUB_SHA} --tag eoluchile/ecommerce-juniper:latest
