@@ -68,8 +68,8 @@ class Webpay(BasePaymentProcessor):
         notify_url = self.notify_url
 
         result = requests.post(self.configuration["api_url"]+"/process-webpay", json={
-            "notify_url": notify_url.replace("http","https"),
-            "return_url": return_url.replace("http","https"),
+            "notify_url": notify_url.replace("http://","https://"),
+            "return_url": return_url.replace("http://","https://"),
             "order_number": basket.order_number,
             "total_incl_tax": basket.total_incl_tax,
             "api_secret": self.configuration["api_secret"]
