@@ -17,8 +17,8 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 ADD . /openedx/ecommerce
-ADD ./assets.py /openedx/ecommerce/ecommerce/settings/assets.py
-ADD ./eol.py /openedx/ecommerce/ecommerce/settings/eol.py
+ADD ./github/assets.py /openedx/ecommerce/ecommerce/settings/assets.py
+ADD ./github/eol.py /openedx/ecommerce/ecommerce/settings/eol.py
 WORKDIR /openedx/ecommerce
 
 # Get nodejs
