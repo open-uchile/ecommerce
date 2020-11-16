@@ -25,7 +25,7 @@ ADD ./.github/assets.py /openedx/ecommerce/ecommerce/settings/assets.py
 
 # Make requirements, Themes and static
 ADD ./.github/themes/. /openedx/ecommerce/ecommerce/themes/
-ENV PATH /opFix logo typoFix logo typoenedx/nodeenv/bin:${PATH}
+ENV PATH /openedx/nodeenv/bin:${PATH}
 RUN make production-requirements
 RUN pip install python-json-logger==0.1.11 whitenoise==5.2.0
 RUN DJANGO_SETTINGS_MODULE=ecommerce.settings.assets make static
