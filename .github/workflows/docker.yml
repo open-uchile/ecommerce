@@ -9,6 +9,9 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
+      - name: Pull submodules
+        run: git submodule update --init --recursive
+
       - name: Build Docker image
         run: docker build . --file .github/Dockerfile --tag eoluchile/ecommerce-juniper:${GITHUB_SHA} --tag eoluchile/ecommerce-juniper:latest
 

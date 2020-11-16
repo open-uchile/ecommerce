@@ -15,17 +15,21 @@ LOGGING['handlers']['json'] = {
 }
 
 LOGGING['loggers']['']['handlers'] = ['json']
- """#LOGGING['handlers']['local'] = {'class': 'logging.StreamHandler'}
+ #LOGGING['handlers']['local'] = {'class': 'logging.StreamHandler'}
 """ 
-PAYMENT_PROCESSORS = (
-    'ecommerce.extensions.payment.processors.webpay.Webpay',
-)
-
-# Enable themes
-ENABLE_COMPREHENSIVE_THEMING = True
- """
 
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
+COMPRESS_ROOT = '/openedx/ecommerce/assets'
 
 DEBUG=False
+
+# Static serve
+MIDDLEWARE += (
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+)
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Themes
+COMPREHENSIVE_THEME_DIRS = ["/openedx/ecommerce/ecommerce/themes", ]
+ENABLE_COMPREHENSIVE_THEMING = True

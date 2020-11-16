@@ -1,0 +1,4 @@
+[submodule ".github/themes/eduabierta"]
+	path = .github/themes/eduabierta
+	url = https://github.com/eol-uchile/eduabierta-ecommerce-theme.git
+	branch = juniper
