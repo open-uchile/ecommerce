@@ -28,7 +28,9 @@ DEBUG=False
 MIDDLEWARE += (
     'whitenoise.middleware.WhiteNoiseMiddleware',
 )
-STATICFILES_STORAGE = 'whitenoise.storage.ManifestStaticFilesStorage'
+#STATICFILES_STORAGE = 'whitenoise.storage.ManifestStaticFilesStorage'
+# Use default STORAGE as explained in http://whitenoise.evans.io/en/stable/django.html#storage-troubleshoot
+# STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 STATIC_ROOT = '/openedx/ecommerce/assets'
 
 # Themes
