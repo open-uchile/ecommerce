@@ -28,7 +28,8 @@ DEBUG=False
 MIDDLEWARE += (
     'whitenoise.middleware.WhiteNoiseMiddleware',
 )
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.ManifestStaticFilesStorage'
+STATIC_ROOT = '/openedx/ecommerce/assets'
 
 # Themes
 COMPREHENSIVE_THEME_DIRS = ["/openedx/ecommerce/ecommerce/themes", ]
