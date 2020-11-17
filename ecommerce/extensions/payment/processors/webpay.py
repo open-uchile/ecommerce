@@ -142,7 +142,7 @@ class Webpay(BasePaymentProcessor):
             "token": token
         })
         
-        if result.status_code === 403 or result.status_code === 500:
+        if result.status_code == 403 or result.status_code == 500:
             raise GatewayError("Webpay Module is not ready")
 
         self.record_processor_response(result.json(), transaction_id=None, basket=None)
