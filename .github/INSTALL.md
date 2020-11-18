@@ -8,13 +8,14 @@ python manage.py create_or_update_site \
   --site-id=1 --site-domain=ecommerce.staging.eol.espinoza.dev \
   --partner-code=eol --partner-name='Eol edX' \
   --lms-url-root=staging.eol.espinoza.dev \
-  --theme-scss-path=sass/themes/edx.scss \
   --payment-processors=webpay \
-  --backend-service-client-id=some-client-id \
-  --backend-service-client-key=some-client-secret \
-  --sso-client-id=oauth client id \
-  --sso-client-key=oauth client key \
-  --from-email=eol-ayuda@uchile.cl
+  --backend-service-client-id=CHANGE ME \
+  --backend-service-client-secret=CHANGE ME \
+  --sso-client-id=CHANGE ME \
+  --sso-client-secret=CHANGE ME \
+  --from-email=eol-ayuda@uchile.cl \
+  --discovery_api_url=https://discovery.staging.eol.espinoza.dev/api/v1 \
+  --base-cookie-domain .staging.eol.espinoza.dev
 ```
 
 The partner code is used to define the payment processor configuration. The default code normally is edx.
