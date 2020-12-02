@@ -11,6 +11,7 @@ from jsonfield import JSONField
 from oscar.apps.payment.abstract_models import AbstractSource
 from solo.models import SingletonModel
 
+from ecommerce.core.models import User
 from ecommerce.extensions.payment.constants import CARD_TYPE_CHOICES
 
 
@@ -121,6 +122,25 @@ class EnterpriseContractMetadata(TimeStampedModel):
                 "Percentage greater than 100 not allowed."
             ))
 
-
 # noinspection PyUnresolvedReferences
 from oscar.apps.payment.models import *  # noqa isort:skip pylint: disable=ungrouped-imports, wildcard-import,unused-wildcard-import,wrong-import-position,wrong-import-order
+
+# =================================
+# EOL Additional models
+# =================================
+class UserBillingInfo(models.Model):
+    billing_city = models.CharField(null=True, max_length=50)
+    billing_district = models.CharField(null=True, max_length=50)
+    billing_address = models.CharField(null=True, max_length=255)
+    id_number = models.CharField(default="66666666-6", max_length=14)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    first_name = models.CharField(max_length=100)
+    last_name_1 = models.CharField(max_length=255)
+    last_name_2 = models.CharField(max_length=255,blank=True)
+
+class BoletaElectronica(models.Model):
+    basket = models.ForeignKey('basket.Basket', verbose_name=_('Basket'),
+                            null=True, blank=True, on_delete=models.SET_NULL)
+    # We don't expect ids to grow that much
+    voucher_id = models.CharField(max_length=64)
+    receipt_url = models.CharField(max_length=255)
