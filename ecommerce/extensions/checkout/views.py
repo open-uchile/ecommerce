@@ -171,6 +171,20 @@ class ReceiptResponseView(ThankYouView):
         learner_portal_url = self.add_message_if_enterprise_user(request)
         if learner_portal_url:
             response.context_data['order_dashboard_url'] = learner_portal_url
+        if hasattr(settings, 'BOLETA_CONFIG'):
+            response.context_data['boleta'] = settings.BOLETA_CONFIG['enabled']
+        # Update lines to change titles
+        response.context_data['custom_order_lines'] = []
+        for line in response.context_data['order'].lines.all():
+            custom_line = {}
+            custom_line['title'] = line.title.replace('Seat in','Asiento en'). \
+                replace('with verified certificate','con certificado verificado'). \
+                replace('and ID verification','y verificación de identidad')
+            custom_line['quantity'] = line.quantity
+            custom_line['product'] = line.product
+            custom_line['unit_price_incl_tax'] = line.unit_price_incl_tax
+            response.context_data['custom_order_lines'].append(custom_line)
+        
         return response
 
     def get_context_data(self, **kwargs):  # pylint: disable=arguments-differ
