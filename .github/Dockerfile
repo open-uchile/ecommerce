@@ -22,6 +22,12 @@ ADD ./.github/eol.py /openedx/ecommerce/ecommerce/settings/eol.py
 ADD ./.github/test.py /openedx/ecommerce/ecommerce/settings/test.py
 ADD ./.github/assets.py /openedx/ecommerce/ecommerce/settings/assets.py
 
+# Copy custom JS and configurations
+ADD ./.github/js/build.js /openedx/ecommerce/build.js
+ADD ./.github/js/config.js /openedx/ecommerce/static/js/config.js
+ADD ./.github/js/eol_basket_app.js /openedx/ecommerce/static/js/apps/eol_basket_app.js
+ADD ./.github/js/basket_page.js /openedx/ecommerce/static/js/eol_pages/basket_page.js
+
 # Make requirements, Themes and static
 ADD ./.github/themes/. /openedx/ecommerce/ecommerce/themes/
 ENV PATH /openedx/nodeenv/bin:${PATH}
