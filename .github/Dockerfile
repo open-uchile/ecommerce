@@ -27,6 +27,7 @@ ADD ./.github/js/build.js /openedx/ecommerce/build.js
 ADD ./.github/js/config.js /openedx/ecommerce/ecommerce/static/js/config.js
 ADD ./.github/js/eol_basket_app.js /openedx/ecommerce/ecommerce/static/js/apps/eol_basket_app.js
 ADD ./.github/js/basket_page.js /openedx/ecommerce/ecommerce/static/js/eol_pages/basket_page.js
+ADD ./.github/js/rut_validator.js /openedx/ecommerce/ecommerce/static/js/utils/rut_validator.js
 
 # Make requirements, Themes and static
 ADD ./.github/themes/. /openedx/ecommerce/ecommerce/themes/
