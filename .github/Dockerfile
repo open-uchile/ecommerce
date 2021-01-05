@@ -22,6 +22,9 @@ ADD ./.github/eol.py /openedx/ecommerce/ecommerce/settings/eol.py
 ADD ./.github/test.py /openedx/ecommerce/ecommerce/settings/test.py
 ADD ./.github/assets.py /openedx/ecommerce/ecommerce/settings/assets.py
 
+# Modify email templates
+ADD ./.github/email_templates/. /openedx/ecommerce/ecommerce/templates/oscar/customer/
+
 # Copy custom JS and configurations
 ADD ./.github/js/build.js /openedx/ecommerce/build.js
 ADD ./.github/js/config.js /openedx/ecommerce/ecommerce/static/js/config.js
