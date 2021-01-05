@@ -2,6 +2,15 @@
 {% load i18n %}
 {% block body %}
 <!-- Message Body -->
+<tr align="left" class="cn-img-wrapper">
+    <td colspan="2" align="left" class="cn-img-wrapper cn-full-width" style="font-size: 20px; vertical-align: middle; padding-left: 30px; color: #127eb1;">
+        <a href="{{site_lms}}"></a>
+        <img alt="{{ platform_name }} logo" src="{{theme_logo}}" width="300" border="0" hspace="0" vspace="0"
+            class="platform-img">
+        </a>
+    </td>
+</tr>
+
 <tr>
     <td class="container-padding" bgcolor="#ffffff" style="background-color: #ffffff; padding-left: 30px; padding-right: 30px; font-size: 13px; line-height: 20px; font-family: Open Sans, sans-serif; color: #333; border-radius: 5px;" align="left">
         <br>
@@ -13,7 +22,7 @@
         <p>{% filter force_escape %}{% blocktrans with platform_name=site_lms %}You can access your course and complete your verification (if required) on your {{platform_name}} dashboard. {% endblocktrans %}{% endfilter %} </p>
         <p>{% filter force_escape %}{% blocktrans %}To explore other great courses, visit the {{platform_name}} website. More courses are added every day!{% endblocktrans %}{% endfilter %}</p>
         <br>
-        <a href="{{ receipt_page_url }}" style="color: #ffffff; text-decoration: none;">
+        <a href="{{ receipt_page_url }}">
             {% trans "View Payment Information" as tmsg %}{{ tmsg | force_escape }}
         </a>
         <br>
@@ -28,7 +37,7 @@
     <td class="footer-padding" style="padding-left: 30px; padding-right: 30px; font-size: 13px; line-height: 20px; font-family: Open Sans, sans-serif; color: #002D40; background-color: #f3f3f3;" align="left">
         <!--footer content -->
         <br>
-        <p>{% filter force_escape %}{% blocktrans with course_title=course_title platform_name=platform_name %}Está recibiendo este correo porque compró una inscripción en el curso {{course_title}} de {{platform_name}}.{% endblocktrans %}{% endfilter %}</p>
+        <p>{% filter force_escape %}{% blocktrans with course_title=course_title platform_name=platform_name %}Está recibiendo este correo porque el producto "{{course_title}}" de {{platform_name}}.{% endblocktrans %}{% endfilter %}</p>
         <br>
         <!--/ end footer content -->
     </td>
