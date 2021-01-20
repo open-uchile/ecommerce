@@ -103,7 +103,7 @@ def authenticate_boleta_electronica(configuration=default_config, basket=None):
         except Exception:
             pass
         order_number = "unset"
-        if basket not is None:
+        if basket is not None:
             order_number = basket.order_number
         boleta_error_message = BoletaErrorMessage(
             content=error_text[:255],
