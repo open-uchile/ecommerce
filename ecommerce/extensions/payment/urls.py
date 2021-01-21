@@ -44,5 +44,5 @@ urlpatterns = [
     url(r'^webpay/', include((WEBPAY_URLS, 'webpay'))), 
 ]
 
-if hasattr(settings, 'BOLETA_CONFIG') and settings.BOLETA_CONFIG['enabled']:
+if hasattr(settings, 'BOLETA_CONFIG') and settings.BOLETA_CONFIG.get('enabled',False):
     urlpatterns += [url(r'^boleta/', recover_boleta, name='recover_boleta')]
