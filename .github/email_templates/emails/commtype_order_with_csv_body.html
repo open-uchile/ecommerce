@@ -23,17 +23,17 @@
             <tr class="cn-content cn-full-width">
                 <td colspan="2" class="cn-content-msg">
                     <p>{% filter force_escape %}{% blocktrans %}Dear {{full_name}},{% endblocktrans %}{% endfilter %}</p>
-                    <p>{% filter force_escape %}{% blocktrans %}Thank you for purchasing access to {{course_name}}. Let's get your group ready to learn with edX:{% endblocktrans %}{% endfilter %}</p>
+                    <p>{% filter force_escape %}{% blocktrans %}Gracias por comprar el acceso a "{{course_name}}". amos a preparar a tu grupo para que aprenda con {{ platform_name }}:{% endblocktrans %}{% endfilter %}</p>
                     <ol>
                         <li>
                             {% blocktrans asvar tmsg %}
-                                Download and save the {link_start}{download_csv_link}{link_middle} enrollment code file.{link_end}
+                                Descargar y guardar el {link_start}{download_csv_link}{link_middle} archivo de códigos de inscripción.{link_end}
                             {% endblocktrans %}
                             {% interpolate_html tmsg link_start='<a href="'|safe link_middle='">'|safe link_end='</a>'|safe download_csv_link=download_csv_link|safe %}
                         </li>
                         <li>{% trans "Distribute one code per learner before the expiration date." as tmsg %}{{ tmsg | force_escape }}</li>
                         <li>{% trans "Pro tip: Track which code is associated with which person." as tmsg %}{{ tmsg | force_escape }}</li>
-                        <li>{% trans "Learners sign-in/register with edX and enroll for the course." as tmsg %}{{ tmsg | force_escape }}</li>
+                        <li>{% filter force_escape %}{% blocktrans %}Los estudiantes se inscriben/registran en {{ platform_name }} y se inscriben al curso.{% endblocktrans %}{% endfilter %}</li>
                     </ol>
                     <p>
                         {% blocktrans asvar tmsg %}
@@ -58,7 +58,7 @@
             <!-- Footer content -->
             <tr class="cn-full-width">
                 <td class="cn-footer-content" colspan="2">
-                    <p>{% trans "By purchasing, you and your organization agree to the following terms:" as tmsg %}{{ tmsg | force_escape }}</p>
+                    <p>{% trans "Al comprar, tú y tu organización aceptan los siguientes términos:" as tmsg %}{{ tmsg | force_escape }}</p>
                     <ul>
                         <li>{% trans "Each code is valid for the one course covered and can be used only one time." as tmsg %}{{ tmsg | force_escape }}</li>
                         <li>{% trans "You are responsible for distributing codes to your learners." as tmsg %}{{ tmsg | force_escape }}</li>

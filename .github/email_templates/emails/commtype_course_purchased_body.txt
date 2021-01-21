@@ -3,16 +3,13 @@
 
 {% blocktrans %}Hi {{full_name}},{% endblocktrans %}
 
-{% blocktrans with course_title=course_title platform_name="Universidad de Chile" %}Thank you for purchasing {{course_title}}. A charge will appear on your credit or debit card statement with a company name of "{{platform_name}}".{% endblocktrans %}
+{% blocktrans with course_title=course_title %}Gracias por comprar "{{course_title}}".{% endblocktrans %} Se le notificará cuando su boleta esté disponible.
 
-{% blocktrans with platform_name=site_lms %}You can access your course and complete your verification (if required) on your {{platform_name}} dashboard. {% endblocktrans %}
-{% blocktrans %}To explore other great courses, visit the {{platform_name}} website. More courses are added every day!{% endblocktrans %}
+{% blocktrans with platform_name=site_lms %} Puede acceder a su curso y completar la verificación (de ser requerida) en {{platform_name}}. {% endblocktrans %}
 
 {% trans "To view your payment information, visit the following website." %}
 {{receipt_page_url}}
 
-{% trans "Thank you. We hope you enjoy the course!" %}
+{% trans "Gracias, ¡Esperamos que disfrute del curso!" %}
 
 {% blocktrans %}{{platform_name}} team{% endblocktrans %}
-
-{% trans "The edX team" %}

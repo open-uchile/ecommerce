@@ -17,10 +17,10 @@
         <!--/message HTML content -->
         <p>{% filter force_escape %}{% blocktrans %}Hi {{full_name}},{% endblocktrans %}{% endfilter %}</p>
         <br>
-        <p>{% filter force_escape %}{% blocktrans with course_title=course_title %}Gracias por comprar "{{course_title}}".{% endblocktrans %}{% endfilter %} Se le notificará cuando su boleta esté disponible.</p>
-        <p>{% filter force_escape %}{% blocktrans with platform_name=site_dashboard %}Puede acceder a su curso y completar la verificación (de ser requerida) en {{platform_name}}. {% endblocktrans %}{% endfilter %} </p>
+        <p>{% filter force_escape %}{% blocktrans with course_title=course_title %}Su boleta para el curso "{{course_title}}" ya está disponible.{% endblocktrans %}{% endfilter %}</p>
+        <p>{% filter force_escape %}{% blocktrans with platform_name=site_dashboard %}Si no ha completado su verificación (de ser requerida) puede hacerlo en {{platform_name}}. {% endblocktrans %}{% endfilter %} </p>
         <a href="{{ receipt_page_url }}">
-            {% trans "View Payment Information" as tmsg %}{{ tmsg | force_escape }}
+            {% trans "Ver boleta e información de pago" as tmsg %}{{ tmsg | force_escape }}
         </a>
         <br>
         <p>Gracias, ¡Esperamos que disfrute del curso!</p>

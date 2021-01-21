@@ -3,19 +3,19 @@
 
 
 {% blocktrans %}Dear {{full_name}},{% endblocktrans %}
-{% blocktrans %}Thank you for purchasing access to {{course_name}}. Let's get your group ready to learn with edX:{% endblocktrans %}
+{% blocktrans %}Gracias por comprar el acceso a "{{course_name}}". amos a preparar a tu grupo para que aprenda con {{ platform_name }}:{% endblocktrans %}
 
-{% blocktrans %}Please visit {{download_csv_link}} to download and save the enrollment code file.{% endblocktrans %}
+{% blocktrans %}Por favor visita {{download_csv_link}} para descargar y guardar el archivo de códigos de inscripción.{% endblocktrans %}
 {% trans "Distribute one code per learner before the expiration date." %}
 {% trans "Pro tip: Track which code is associated with which person." %}
-{% trans "Learners sign-in/register with edX and enroll for the course." %}
+{% blocktrans %}Los estudiantes se inscriben/registran en {{ platform_name }} y se inscriben al curso.{% endblocktrans %}
 
 {% blocktrans %}To view your payment information, log in to see your Order History, under Account Settings at {{order_history_url}}.{% endblocktrans %}
 {% blocktrans %}For more information and assistance, contact info@edx.org.{% endblocktrans %}
 
 {% trans "Thank You" %}
 
-{% trans "By purchasing, you and your organization agree to the following terms:" %}
+{% trans "Al comprar, tú y tu organización aceptan los siguientes términos:" %}
 
 {% trans "Each code is valid for the one course covered and can be used only one time." %}
 {% trans "You are responsible for distributing codes to your learners."%}
