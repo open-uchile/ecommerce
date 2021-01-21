@@ -1,7 +1,7 @@
 {% load i18n %}
 {% trans "Receipt Confirmation for: " %}{{course_title}}
 
-{% blocktrans %}Hi {{full_name}},{% endblocktrans %}
+{% blocktrans %}Hola {{full_name}},{% endblocktrans %}
 
 {% blocktrans with course_title=course_title %}Su boleta para el curso "{{course_title}}" ya está disponible.{% endblocktrans %}
 
@@ -12,5 +12,5 @@
 
 {% trans "Gracias, ¡Esperamos que disfrute del curso!" %}
 
-{% blocktrans %}{{platform_name}} team{% endblocktrans %}
+{% blocktrans %}Equipo de {{platform_name}}{% endblocktrans %}
 
