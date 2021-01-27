@@ -3,7 +3,7 @@
 
 
 {% blocktrans %}Dear {{full_name}},{% endblocktrans %}
-{% blocktrans %}Gracias por comprar el acceso a "{{course_name}}". amos a preparar a tu grupo para que aprenda con {{ platform_name }}:{% endblocktrans %}
+{% blocktrans %}Gracias por comprar el acceso a "{{course_name}}". Vamos a preparar a tu grupo para que aprenda con {{ platform_name }}:{% endblocktrans %}
 
 {% blocktrans %}Por favor visita {{download_csv_link}} para descargar y guardar el archivo de códigos de inscripción.{% endblocktrans %}
 {% trans "Distribute one code per learner before the expiration date." %}
