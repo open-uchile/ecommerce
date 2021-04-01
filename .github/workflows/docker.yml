@@ -15,6 +15,9 @@ jobs:
       - name: Build Docker image
         run: docker build . --file .github/Dockerfile --tag eoluchile/ecommerce-juniper:${GITHUB_SHA} --tag eoluchile/ecommerce-juniper:latest
 
+      - name: Run tests
+        run: docker run eoluchile/ecommerce-juniper:${GITHUB_SHA} /openedx/ecommerce/tests.sh
+
       - name: Push
         run: |
           echo "${DOCKERHUB_PASSWORD}" | docker login --username ${DOCKERHUB_USER} --password-stdin

@@ -40,9 +40,8 @@ RUN make production-requirements
 RUN pip3 install python-json-logger==0.1.11 whitenoise==5.2.0
 RUN DJANGO_SETTINGS_MODULE=ecommerce.settings.assets make static
 
-# Run test for webpay payment processor
-RUN tox -e py38-django22-tests ecommerce/extensions/payment/tests/processors/test_webpay.py
-RUN tox -e py38-django22-tests ecommerce/extensions/payment/tests/test_boleta.py
+# Copy EOL tests script
+ADD ./.github/tests.sh /openedx/ecommerce/tests.sh
 
 EXPOSE 8000
 ENV DJANGO_SETTINGS_MODULE=ecommerce.settings.eol
