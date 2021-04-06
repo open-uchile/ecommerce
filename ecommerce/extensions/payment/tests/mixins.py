@@ -1086,6 +1086,8 @@ class BoletaMixin:
         "last_name_2": "",
     }
 
+    BOLETA_DATE = "2020-03-01T00:00:00"
+
     def make_billing_info_helper(self, id_type, country_code, basket):
         billing_info = UserBillingInfo(
             billing_district="district",
@@ -1123,7 +1125,7 @@ class BoletaMixin:
             url='https://ventas-test.uchile.cl/ventas-api-front/api/v1/ventas/id',
             json={
                 "boleta": {
-                    "fechaEmision": "2020-03-01T00:00:00",
+                    "fechaEmision": self.BOLETA_DATE,
                     "folio": "folio"
                 },
                 "recaudaciones": [{"monto": int(total)}]
@@ -1137,11 +1139,11 @@ class BoletaMixin:
                 since, status),
             json=[{
                 "boleta": {
-                    "fechaEmision": "2020-03-01T00:00:00",
+                    "fechaEmision": self.BOLETA_DATE,
                     "folio": "folio"
                 },
                 "id": "id",
-                "recaudaciones": [{"monto": int(total), "id": order_number}]
+                "recaudaciones": [{"monto": int(total), "voucher": order_number}]
                 }]
             
         )
