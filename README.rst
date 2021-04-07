@@ -16,6 +16,7 @@ Changelog
 - added webpay payment processor and views
 - changed default error pages for 404 and 500 errors
 - added models on extensions/payment
+- changed ReceiptResponseView on ecommerce/extensions/checkout/views to add boleta to template context
 - added template, javascript and emails
 - added commands to extensions/payment
 
