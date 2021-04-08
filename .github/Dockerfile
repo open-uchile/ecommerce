@@ -40,8 +40,9 @@ RUN make production-requirements
 RUN pip3 install python-json-logger==0.1.11 whitenoise==5.2.0
 RUN DJANGO_SETTINGS_MODULE=ecommerce.settings.assets make static
 
-# Copy EOL tests script
+# Copy EOL scripts
 ADD ./.github/tests.sh /openedx/ecommerce/tests.sh
+ADD ./.github/verify_and_do_boletas.sh /openedx/ecommerce/verify_and_do_boletas.sh
 
 EXPOSE 8000
 ENV DJANGO_SETTINGS_MODULE=ecommerce.settings.eol

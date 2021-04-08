@@ -3,6 +3,7 @@ from urllib.parse import quote
 
 from django.http import HttpResponse
 from django.template import TemplateDoesNotExist, loader
+from django.views.defaults import page_not_found
 
 from ecommerce.core.url_utils import _get_site_configuration
 
