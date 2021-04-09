@@ -40,8 +40,7 @@ urlpatterns = [
     url(r'^paypal/', include((PAYPAL_URLS, 'paypal'))),
     url(r'^sdn/', include((SDN_URLS, 'sdn'))),
     url(r'^stripe/', include((STRIPE_URLS, 'stripe'))),
-    url(r'^webpay/', include((WEBPAY_URLS, 'webpay'))), 
+    url(r'^webpay/', include((WEBPAY_URLS, 'webpay'))),
+    url(r'^boleta/', recover_boleta, name='recover_boleta'),
 ]
-
-if hasattr(settings, 'BOLETA_CONFIG') and settings.BOLETA_CONFIG.get('enabled',False):
-    urlpatterns += [url(r'^boleta/', recover_boleta, name='recover_boleta')]
+    

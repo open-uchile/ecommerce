@@ -155,9 +155,10 @@ COMPRESS_OFFLINE = True
 COMPREHENSIVE_THEME_DIRS = [
     Path(DJANGO_ROOT + "/tests/themes"),
     Path(DJANGO_ROOT + "/tests/themes-dir-2"),
+    "/openedx/ecommerce/ecommerce/themes",
 ]
 
-DEFAULT_SITE_THEME = "test-theme"
+DEFAULT_SITE_THEME = "uabierta"
 
 ENTERPRISE_API_URL = urljoin(ENTERPRISE_SERVICE_URL, 'api/v1/')
 
@@ -175,3 +176,20 @@ BROKER_BACKEND = 'memory'
 #SAILTHRU settings
 SAILTHRU_KEY = 'abc123'
 SAILTHRU_SECRET = 'top_secret'
+
+BOLETA_SETTINGS = {
+    "enabled": True,
+    "send_boleta_email": False,
+    "generate_on_payment": True,
+    "team_email": "test@localhost",
+    "halt_on_boleta_failure": True,
+    "client_id": "secret",
+    "client_secret": "secret",
+    "client_scope": "dte:tdo",
+    "config_centro_costos": "secret",
+    "config_cuenta_contable": "secret",
+    "config_sucursal": "secret",
+    "config_reparticion": "secret",
+    "config_identificador_pos": "secret",
+    "config_ventas_url": "https://ventas-test.uchile.cl/ventas-api-front/api/v1",
+}
