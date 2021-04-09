@@ -193,3 +193,10 @@ BOLETA_SETTINGS = {
     "config_identificador_pos": "secret",
     "config_ventas_url": "https://ventas-test.uchile.cl/ventas-api-front/api/v1",
 }
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'PREFIX': 'test'
+    }
+}
