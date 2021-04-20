@@ -31,7 +31,7 @@ def handler404(request, exception):  # pylint: disable=unused-argument
             supplied), or the exception class name
     """
 
-    if "webpay/execute/" in request.get_full_path():
+    if "/execute/" in request.get_full_path():
         
         exception_repr = exception.__class__.__name__
         message = "error"
