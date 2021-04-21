@@ -18,7 +18,7 @@ def handler404(request, exception):  # pylint: disable=unused-argument
     """
     404 handler.
 
-    If the error comes from a /payment/webpay/execute then it is the
+    If the error comes from a /payment/*processor*/execute then it is the
     result of a catastrophic error and a different error must appear.
 
     Templates: :template:`404.html` and `402.html`
