@@ -350,7 +350,7 @@ class Paypal(EolBillingMixin, BasePaymentProcessor):
                     entry.id
                 )
                 self.send_support_email(
-                    'Paypal failed to pay', 'Lugar: en commit de la transacción de Paypal. Paypal superó los intentos para completar el pago.\nDetalles {}'.format(str(error)))
+                    'Paypal failed to pay', 'Lugar: en commit de la transacción de Paypal. Paypal superó los intentos para completar el pago.\nBasket {}.\nDetalles {}'.format(basket.id,str(error)))
                 raise GatewayError
 
         self.record_processor_response(
