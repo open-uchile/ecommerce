@@ -29,6 +29,7 @@ from ecommerce.extensions.payment.exceptions import (
     InvalidSignatureError,
     RedundantPaymentNotificationError
 )
+from ecommerce.extensions.payment.models import UserBillingInfo
 from ecommerce.extensions.payment.helpers import sign
 from ecommerce.extensions.payment.processors.cybersource import Cybersource
 from ecommerce.extensions.test.factories import create_basket
@@ -863,6 +864,7 @@ class PaypalMixin:
     def get_payment_creation_response_mock(self, basket, state=PAYMENT_CREATION_STATE, approval_url=APPROVAL_URL):
         total = str(basket.total_incl_tax)
         payment_creation_response = {
+            'application_context': {'landing_page': 'Billing'},
             'create_time': '2015-05-04T18:18:27Z',
             'id': self.PAYMENT_ID,
             'intent': 'sale',
@@ -956,6 +958,7 @@ class PaypalMixin:
             payer_info = self.PAYER_INFO
         total = str(basket.total_incl_tax)
         payment_execution_response = {
+            'application_context': {'landing_page': 'Billing'},
             'create_time': '2015-05-04T15:55:27Z',
             'id': self.PAYMENT_ID,
             'intent': 'sale',
@@ -1059,3 +1062,241 @@ class CyberSourceRESTAPIMixin:
             lambda x: x.group(1) + x.group(2).upper(),
             processor_json
         ).replace('links', '_links').replace('_self', 'self')
+        
+class BoletaMixin:
+    """
+    Boleta Mixin that provides
+    - a standard settings override.
+    - a user billing info creation tool, that's necessary to create boletas.
+    - mock methods for the ventas API with standard responses.
+
+    Each tests that mocks a response requires the @responses.activate decorator
+    """
+
+    BOLETA_SETTINGS = {
+        "enabled": True,
+        "send_boleta_email": False,
+        "generate_on_payment": True,
+        "team_email": "test@localhost",
+        "halt_on_boleta_failure": True,
+        "client_id": "secret",
+        "client_secret": "secret",
+        "client_scope": "dte:tdo",
+        "config_centro_costos": "secret",
+        "config_cuenta_contable": "secret",
+        "config_sucursal": "secret",
+        "config_reparticion": "secret",
+        "config_identificador_pos": "secret",
+        "config_ventas_url": "https://ventas-test.uchile.cl/ventas-api-front/api/v1",
+    }
+
+    BOLETA_SETTINGS_DISABLED = {
+        "enabled": False
+    }
+
+    BILLING_INFO_FORM = {
+        "billing_district": "district",
+        "billing_city": "city",
+        "billing_address": "address",
+        "billing_country": "CL",
+        "id_number": "1-9",
+        "id_option": "0",
+        "id_other": "",
+        "first_name": "first_name last_name",
+        "last_name_1": "last_name_1",
+        "last_name_2": "",
+        "payment_processor": "webpay"
+    }
+
+    BOLETA_DATE = "2020-03-01T00:00:00"
+
+    def make_billing_info_helper(self, id_type, country_code, basket, processor="webpay"):
+        billing_info = UserBillingInfo(
+            billing_district="district",
+            billing_city="city",
+            billing_address="address",
+            billing_country_iso2=country_code,
+            id_number="1-9",
+            id_option=id_type,
+            id_other="",
+            first_name="name name",
+            last_name_1="last name",
+            basket=basket,
+            payment_processor=processor,
+        )
+        billing_info.save()
+        return billing_info
+
+    def mock_boleta_auth(self):
+        responses.add(
+            method=responses.POST,
+            url='https://ventas-test.uchile.cl/ventas-api-front/api/v1/authorization-token',
+            json={"access_token": "test", "codigoSII": "codigo sucursal",
+                  "repCodigo": "codigo reparticion", "expires_in": 299}
+        )
+
+    def mock_boleta_creation(self, boleta_id="id"):
+        responses.add(
+            method=responses.POST,
+            url='https://ventas-test.uchile.cl/ventas-api-front/api/v1/ventas',
+            json={"id": boleta_id}
+        )
+
+    def mock_boleta_details(self, total):
+        responses.add(
+            method=responses.GET,
+            url='https://ventas-test.uchile.cl/ventas-api-front/api/v1/ventas/id',
+            json={
+                "boleta": {
+                    "fechaEmision": self.BOLETA_DATE,
+                    "folio": "folio"
+                },
+                "recaudaciones": [{"monto": int(total)}]
+            }
+        )
+
+    def mock_boleta_get_boletas(self, since, status="CONTABILIZADA", total=10, order_number="UA-100001"):
+        responses.add(
+            method=responses.GET,
+            url='https://ventas-test.uchile.cl/ventas-api-front/api/v1/ventas/?fecha-desde={}&estado={}'.format(
+                since, status),
+            json=[{
+                "boleta": {
+                    "fechaEmision": self.BOLETA_DATE,
+                    "folio": "folio"
+                },
+                "id": "id",
+                "recaudaciones": [{"monto": int(total), "voucher": order_number}]
+                }]
+            
+        )
+
+    def mock_boleta_get_boletas_custom(self, since, json_response=[], status="CONTABILIZADA"):
+        responses.add(
+            method=responses.GET,
+            url='https://ventas-test.uchile.cl/ventas-api-front/api/v1/ventas/?fecha-desde={}&estado={}'.format(
+                since, status),
+            json=json_response
+        )
+
+    def mock_boleta_auth_refused(self):
+        responses.add(
+            method=responses.POST,
+            url='https://ventas-test.uchile.cl/ventas-api-front/api/v1/authorization-token',
+            json={"message": "error auth"},
+            status=403
+        )
+
+    def mock_boleta_creation_500(self):
+        responses.add(
+            method=responses.POST,
+            url='https://ventas-test.uchile.cl/ventas-api-front/api/v1/ventas',
+            status=500
+        )
+
+    def mock_boleta_details_404(self, boleta_id="id"):
+        responses.add(
+            method=responses.GET,
+            url='https://ventas-test.uchile.cl/ventas-api-front/api/v1/ventas/{}'.format(
+                boleta_id),
+            status=404
+        )
+
+    def mock_boleta_get_boletas_500(self, since, status="CONTABILIZADA"):
+        responses.add(
+            method=responses.GET,
+            url='https://ventas-test.uchile.cl/ventas-api-front/api/v1/ventas/?fecha-desde={}&estado={}'.format(
+                since, status),
+            status=500   
+        )
+    
+    def mock_boleta_get_file(self, id):
+        responses.add(
+            method=responses.GET,
+            url='https://ventas-test.uchile.cl/ventas-api-front/api/v1/ventas/{}/boletas/pdf'.format(id),
+            body="I'm a PDF file"
+        )
+
+    def mock_boleta_get_file_404(self, id):
+        responses.add(
+            method=responses.GET,
+            url='https://ventas-test.uchile.cl/ventas-api-front/api/v1/ventas/{}/boletas/pdf'.format(id),
+            status=404
+        )
+    
+    def mock_boleta_get_file_500(self, id):
+        responses.add(
+            method=responses.GET,
+            url='https://ventas-test.uchile.cl/ventas-api-front/api/v1/ventas/{}/boletas/pdf'.format(id),
+            status=500
+        )
+
+class TransbankMixin:
+    """
+    Transbank Mixin that provides
+    - a standard settings override.
+    - mock methods for the Transbank service with standard responses.
+
+    Each tests that mocks a response requires the @responses.activate decorator
+    """
+
+    def get_transaction_details_helper(self, status='INITIALIZED', amount=0, order="", response_code=0):
+        """Helper function"""
+
+        return {'accounting_date': '1223',
+            'amount': amount,#float(self.basket.total_incl_tax),
+            'authorization_code': '1213',
+            'buy_order': order,#self.basket.order_number,
+            'card_detail': {'card_number': '6623'},
+            'installments_number': 0,
+            'payment_type_code': 'VN',
+            'response_code': response_code,#0,
+            'session_id': 'EOL-100049',
+            'status': status,
+            'transaction_date': '2020-12-23T17:50:37.179Z',
+            'vci': 'TSY'}
+    
+    def mock_transbank_initial_token_response(self, resp=None):
+        json_resp = {"token": "test-token", "url": "http://webpay.cl"}
+        if resp is not None:
+            json_resp = resp
+        responses.add(
+            method=responses.POST,
+            url='http://transbank:5000/process-webpay',
+            json=json_resp
+        )
+    
+    def mock_transbank_initial_token_response_error(self, error=403):
+        responses.add(
+            method=responses.POST,
+            url='http://transbank:5000/process-webpay',
+            status=error
+        )
+    
+    def mock_transbank_response(self, status='AUTHORIZED', amount=0, order="", response_code=0):
+        responses.add(
+            method=responses.POST,
+            url='http://transbank:5000/get-transaction',
+            json=self.get_transaction_details_helper(status, amount, order, response_code)
+        )
+    
+    def mock_transbank_response_error(self, status=403):
+        responses.add(
+            method=responses.POST,
+            url='http://transbank:5000/get-transaction',
+            status=status
+        )
+    
+    def mock_transbank_status_response(self, status='INITIALIZED', amount=0, order="", response_code=0):
+        responses.add(
+            method=responses.POST,
+            url='http://transbank:5000/transaction-status',
+            json=self.get_transaction_details_helper(status, amount, order, response_code)
+        )
+    
+    def mock_transbank_status_response_error(self, status=403):
+        responses.add(
+            method=responses.POST,
+            url='http://transbank:5000/transaction-status',
+            status=status
+        )

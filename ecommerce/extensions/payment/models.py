@@ -8,11 +8,13 @@ from django.db import models
 from django.db.transaction import atomic
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
 from django_extensions.db.models import TimeStampedModel
 from jsonfield import JSONField
 from oscar.apps.payment.abstract_models import AbstractSource
 from solo.models import SingletonModel
 
+from ecommerce.core.models import User
 from ecommerce.extensions.payment.constants import CARD_TYPE_CHOICES
 from ecommerce.extensions.payment.exceptions import SDNFallbackDataEmptyError
 
@@ -289,3 +291,100 @@ class SDNFallbackData(models.Model):
 
 # noinspection PyUnresolvedReferences
 from oscar.apps.payment.models import *  # noqa isort:skip pylint: disable=ungrouped-imports, wildcard-import,unused-wildcard-import,wrong-import-position,wrong-import-order
+
+# =================================
+# EOL Additional models
+# =================================
+
+class BoletaElectronica(models.Model):
+    basket = models.ForeignKey('basket.Basket', verbose_name=_('Basket'),
+                            null=True, blank=True, on_delete=models.CASCADE)
+    # We don't expect ids to grow that much
+    voucher_id = models.CharField(max_length=64)
+    receipt_url = models.CharField(max_length=255)
+    folio = models.CharField(max_length=64, blank=True)
+    emission_date = models.DateTimeField(null=True)
+    amount = models.IntegerField(default=0)
+
+
+    def __str__(self):
+        return "Boleta {} con folio {} por ${}. {}".format(self.voucher_id, self.folio, self.amount, self.emission_date)
+
+class UserBillingInfo(models.Model):
+
+    RUT = '0'
+    PASSPORT = '1'
+    OTRO = '2'
+    ID_TYPES = [
+        (RUT, 'Rut'),
+        (PASSPORT, 'Pasaporte'),
+        (OTRO, 'Otros'),
+    ]
+    basket = models.ForeignKey('basket.Basket', verbose_name=_('Basket'),
+                            null=True, unique=True, on_delete=models.CASCADE)
+
+    billing_country_iso2 = models.CharField(max_length=2)
+    billing_city = models.CharField(max_length=50)
+    billing_district = models.CharField(max_length=50)
+    billing_address = models.CharField(max_length=255)
+
+    boleta = models.ForeignKey(to=BoletaElectronica, on_delete=models.CASCADE,
+                            null=True, default=None)
+
+    first_name = models.CharField(max_length=12)
+    id_number = models.CharField(default="66666666-6", max_length=14)
+    id_option = models.CharField(choices=ID_TYPES,max_length=1,default=RUT)
+    id_other = models.CharField(blank=True,max_length=100)
+    # We can get the user by looking at the owner
+    last_name_1 = models.CharField(max_length=12)
+    last_name_2 = models.CharField(max_length=12,blank=True)
+    payment_processor = models.CharField(max_length=10, default="webpay")
+
+    def __str__(self):
+        return "Información de boleta de {} con {}".format(self.first_name, self.payment_processor)
+
+class PaypalUSDConversion(models.Model):
+    """
+    Rate to convert a products CLP price to USD
+    in order to pay with Paypal
+
+    Paypal will use the most recent rate using the date
+    """
+    class Meta:
+        ordering = ["-creation_date"]
+
+    creation_date = models.DateTimeField(default=timezone.now, editable=False)
+    clp_to_usd = models.IntegerField(default=750, help_text="Rate used at payment to give the correct price to paypal")
+    basket = models.ManyToManyField('basket.Basket', verbose_name=_('Basket'), blank=True)
+
+    def __str__(self):
+        return "Date: {}. 1 USD = {} CLP".format(self.creation_date, self.clp_to_usd)
+
+class BoletaUSDConversion(models.Model):
+    """
+    Rate to convert USD to CLP at boleta emissions
+
+    The most recent rate using the date will be used
+    """
+    class Meta:
+        ordering = ["-creation_date"]
+
+    creation_date = models.DateTimeField(default=timezone.now, editable=False)
+    clp_to_usd = models.IntegerField(default=750, help_text="Rate used at boleta emission to get the correct CLP from the USDs")
+    boleta = models.ManyToManyField(BoletaElectronica, blank=True)
+
+    def __str__(self):
+        return "Date: {}. 1 USD = {} CLP".format(self.creation_date, self.clp_to_usd)
+    
+class BoletaErrorMessage(models.Model):
+    """
+    The messages are processed by other clases and then disposed off.
+    Normally there should be no messages as they would be sent by email.
+    """
+    code = models.PositiveSmallIntegerField(default=0)
+    order_number = models.CharField(max_length=20,default="")
+    content = models.CharField(max_length=255)
+    error_at = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return "Unsent message with code {}, check the email settings".format(self.code)

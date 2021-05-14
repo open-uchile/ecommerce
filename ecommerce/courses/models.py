@@ -54,7 +54,8 @@ class Course(models.Model):
             product_class=ProductClass.objects.get(name=SEAT_PRODUCT_CLASS_NAME),
         )
         ProductCategory.objects.get_or_create(category=Category.objects.get(name='Seats'), product=parent)
-        parent.title = 'Seat in {}'.format(self.name)
+        #parent.title = 'Seat in {}'.format(self.name)
+        parent.title = 'Inscripción en {}'.format(self.name)
         parent.is_discountable = True
         parent.attr.course_key = self.id
         parent.save()
@@ -128,13 +129,19 @@ class Course(models.Model):
 
     def get_course_seat_name(self, certificate_type, id_verification_required):
         """ Returns the name for a course seat. """
-        name = u'Seat in {}'.format(self.name)
+        #name = u'Seat in {}'.format(self.name)
+        name = u'Inscripción en {}'.format(self.name)
 
         if certificate_type != '':
-            name += u' with {} certificate'.format(certificate_type)
+            #name += u' with {} certificate'.format(certificate_type)
+            certificate_type_str = certificate_type
+            if certificate_type_str == "verified":
+                certificate_type_str = "verificado"
+            name += u' con certificado {}'.format(certificate_type_str)
 
             if id_verification_required:
-                name += u' (and ID verification)'
+                #name += u' (and ID verification)'
+                name += u' (y verificación de ID)'
 
         return name
 
@@ -295,8 +302,12 @@ class Course(models.Model):
         enrollment_code = self.get_enrollment_code()
 
         if not enrollment_code:
-            title = 'Enrollment code for {seat_type} seat in {course_name}'.format(
-                seat_type=seat_type,
+            seat_type_str = seat_type
+            if seat_type_str == "verified":
+                seat_type_str = "verificada"
+            #title = 'Enrollment code for {seat_type} seat in {course_name}'.format(
+            title = 'Código de inscripción {seat_type} en {course_name}'.format(
+                seat_type=seat_type_str,
                 course_name=self.name
             )
             enrollment_code = Product(

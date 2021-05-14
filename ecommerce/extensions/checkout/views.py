@@ -29,6 +29,7 @@ from ecommerce.enterprise.utils import has_enterprise_offer
 from ecommerce.extensions.checkout.exceptions import BasketNotFreeError
 from ecommerce.extensions.checkout.mixins import EdxOrderPlacementMixin
 from ecommerce.extensions.checkout.utils import get_receipt_page_url
+from ecommerce.extensions.payment.models import BoletaElectronica
 from ecommerce.extensions.payment.utils import get_program_uuid
 
 Applicator = get_class('offer.applicator', 'Applicator')
@@ -171,6 +172,27 @@ class ReceiptResponseView(ThankYouView):
         learner_portal_url = self.add_message_if_enterprise_user(request)
         if learner_portal_url:
             response.context_data['order_dashboard_url'] = learner_portal_url
+
+        if hasattr(settings, 'BOLETA_CONFIG') and response.context_data['order'].total_incl_tax > 0:
+            response.context_data['boleta'] = settings.BOLETA_CONFIG.get('enabled',False)
+            basket = Order.objects.get(number=request.GET.get("order_number")).basket
+            boletas = BoletaElectronica.objects.filter(basket=basket)
+            if len(boletas) == 1:
+                response.context_data['boleta_ready'] = True
+            else:
+                response.context_data['boleta_ready'] = False
+        # Update lines to change titles
+        response.context_data['custom_order_lines'] = []
+        for line in response.context_data['order'].lines.all():
+            custom_line = {}
+            custom_line['title'] = line.title.replace('Seat in','Asiento en'). \
+                replace('with verified certificate','con certificado verificado'). \
+                replace('and ID verification','y verificación de identidad')
+            custom_line['quantity'] = line.quantity
+            custom_line['product'] = line.product
+            custom_line['unit_price_incl_tax'] = line.unit_price_incl_tax
+            response.context_data['custom_order_lines'].append(custom_line)
+        
         return response
 
     def get_context_data(self, **kwargs):  # pylint: disable=arguments-differ
