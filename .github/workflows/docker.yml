@@ -13,16 +13,16 @@ jobs:
         run: git submodule update --init --recursive
 
       - name: Build Docker image
-        run: docker build . --file .github/Dockerfile --tag eoluchile/ecommerce-juniper:${GITHUB_SHA} --tag eoluchile/ecommerce-juniper:latest
+        run: docker build . --file .github/Dockerfile --tag eoluchile/ecommerce-koa:${GITHUB_SHA} --tag eoluchile/ecommerce-koa:latest
 
       - name: Run tests
-        run: docker run eoluchile/ecommerce-juniper:${GITHUB_SHA} /openedx/ecommerce/tests.sh
+        run: docker run eoluchile/ecommerce-koa:${GITHUB_SHA} /openedx/ecommerce/tests.sh
 
       - name: Push
         run: |
           echo "${DOCKERHUB_PASSWORD}" | docker login --username ${DOCKERHUB_USER} --password-stdin
-          docker push eoluchile/ecommerce-juniper:${GITHUB_SHA}
-          docker push eoluchile/ecommerce-juniper:latest
+          docker push eoluchile/ecommerce-koa:${GITHUB_SHA}
+          docker push eoluchile/ecommerce-koa:latest
         env:
           DOCKERHUB_USER: ${{ secrets.DOCKERHUB_USER }}
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
