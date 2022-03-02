@@ -190,7 +190,7 @@ def determine_billable_price(basket, product_line, order, payment_processor='web
     if payment_processor == 'paypal':
         # Determine price sent to paypal
         conversion_rate_used = basket.paypalusdconversion_set.first().clp_to_usd
-        dollars = (Decimal(7500) / Decimal(conversion_rate_used)).quantize(Decimal('.11'), rounding=ROUND_HALF_UP)
+        dollars = (Decimal(product_line.unit_price_incl_tax) / Decimal(conversion_rate_used)).quantize(Decimal('.11'), rounding=ROUND_HALF_UP)
 
         # Parse to the current billable price
         billable_conversion_rate = BoletaUSDConversion.objects.first().clp_to_usd
