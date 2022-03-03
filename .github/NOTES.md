@@ -23,7 +23,7 @@ PAYMENT_PROCESSOR_CONFIG:
   edx:
     paypal:
     ...
-  eol:
+  openuchile:
     webpay:
       api_url: http://transbank:5000
       api_secret: my-secret-is-really-important
