@@ -78,10 +78,11 @@ class WebpayPaymentNotificationView(EolAlertMixin, EdxOrderPlacementMixin, View)
             logger.info("Payment token [%s] update received by Webpay", token)
         elif 'TBK_TOKEN' in request.POST:
             token = request.POST.get("TBK_TOKEN",'')
+            logger.info(request.POST)
             logger.info("Payment token [%s] update received by Webpay", token)
         else:
-            raise Http404("Hubo un error al obtener los detalles desde Webpay.")
             logger.info('no existe token en el post')
+            raise Http404("Hubo un error al obtener los detalles desde Webpay.")
 
         try:
             payment = self.payment_processor.get_transaction_data(token)
