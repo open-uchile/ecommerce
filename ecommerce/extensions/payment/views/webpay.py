@@ -74,6 +74,7 @@ class WebpayPaymentNotificationView(EolAlertMixin, EdxOrderPlacementMixin, View)
     def post(self, request):
         """Handle a notification received by Webpay with status update of a transaction"""
         token = request.POST.get("token_ws",'')
+        logger.info(request.POST)
         logger.info("Payment token [%s] update received by Webpay", token)
         try:
             payment = self.payment_processor.get_transaction_data(token)
@@ -144,7 +145,7 @@ class WebpayPaymentNotificationView(EolAlertMixin, EdxOrderPlacementMixin, View)
                 request=request
             )
             self.handle_post_order(order)
-            
+
             # Order is created; then send email if enabled
             self.payment_processor.boleta_emission(basket, order, logger)
 
