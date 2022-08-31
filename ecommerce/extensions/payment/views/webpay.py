@@ -73,7 +73,7 @@ class WebpayPaymentNotificationView(EolAlertMixin, EdxOrderPlacementMixin, View)
 
     def post(self, request):
         """Handle a notification received by Webpay with status update of a transaction"""
-        token = request.POST.get("TBK_TOKEN",'')
+        token = request.POST.get("token_ws",'')
         logger.info(request.POST)
         logger.info("Payment token [%s] update received by Webpay", token)
         try:
