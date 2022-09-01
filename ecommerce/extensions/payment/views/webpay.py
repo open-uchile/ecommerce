@@ -80,6 +80,7 @@ class WebpayPaymentNotificationView(EolAlertMixin, EdxOrderPlacementMixin, View)
             token = request.POST.get("TBK_TOKEN",'')
             logger.info(request.POST)
             logger.info("Payment token [%s] update received by Webpay", token)
+            return redirect(reverse('checkout:cancel-checkout'))
         else:
             logger.info('no existe token en el post')
             raise Http404("Hubo un error al obtener los detalles desde Webpay.")
