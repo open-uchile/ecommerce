@@ -87,7 +87,6 @@ class WebpayPaymentNotificationView(EolAlertMixin, EdxOrderPlacementMixin, View)
 
         try:
             payment = self.payment_processor.get_transaction_data(token)
-            logger.info(payment)
             if not payment:
                 raise Exception("No payment response received")
         except Exception as e:
@@ -135,6 +134,7 @@ class WebpayPaymentNotificationView(EolAlertMixin, EdxOrderPlacementMixin, View)
 
         # By this point the payment should be confirmed by webpay and our response saved
         # This should allow us to in case of failure, use the fulfill_order command
+        logger.info(payment)
         try:
             # Generate and handle the order
             shipping_method = NoShippingRequired()
