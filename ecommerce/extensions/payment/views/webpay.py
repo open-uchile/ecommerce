@@ -87,6 +87,7 @@ class WebpayPaymentNotificationView(EolAlertMixin, EdxOrderPlacementMixin, View)
 
         try:
             payment = self.payment_processor.get_transaction_data(token)
+            logger.info(payment)
             if not payment:
                 raise Exception("No payment response received")
         except Exception as e:
