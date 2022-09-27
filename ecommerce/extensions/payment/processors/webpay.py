@@ -59,9 +59,9 @@ class Webpay(EolBillingMixin, BasePaymentProcessor):
         Construct a new instance of the Webpay processor.
         """
         super(Webpay, self).__init__(site)
-        
 
-    
+
+
     def get_transaction_parameters(self, basket, request=None, use_client_side_checkout=False, **kwargs):
         """
         Create a new Webpay payment.
@@ -171,7 +171,7 @@ class Webpay(EolBillingMixin, BasePaymentProcessor):
 
                 # Associate final processor
                 self.asociateUserInfoToProcessor(basket, self.NAME)
-                
+
                 return HandledProcessorResponse(
                     transaction_id=basket.order_number,
                     total=basket.total_incl_tax,
@@ -231,6 +231,7 @@ class Webpay(EolBillingMixin, BasePaymentProcessor):
             raise GatewayError(
                 "Webpay Module is not ready, error code {}".format(result.status_code))
         response=result.json()
+        logger.info(response)
         return response
 
     @property

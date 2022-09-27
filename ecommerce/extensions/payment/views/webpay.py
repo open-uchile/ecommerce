@@ -134,7 +134,6 @@ class WebpayPaymentNotificationView(EolAlertMixin, EdxOrderPlacementMixin, View)
 
         # By this point the payment should be confirmed by webpay and our response saved
         # This should allow us to in case of failure, use the fulfill_order command
-        logger.info(payment)
         try:
             # Generate and handle the order
             shipping_method = NoShippingRequired()
