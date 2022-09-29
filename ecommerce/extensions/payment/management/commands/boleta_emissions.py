@@ -22,9 +22,9 @@ class Command(BaseCommand):
         Save authentication credentials on cache for half it's lifetime
         """
         auth = cache.get("boleta_emissions_auth_cache", None)
+        logger.info(auth)
         if auth == None or auth["expires_in"] < 20:
             auth = authenticate_boleta_electronica(basket=basket)
-            logger.info(auth)
             cache.set("boleta_emissions_auth_cache", auth, auth["expires_in"]//2)
         return auth
 
@@ -74,7 +74,7 @@ class Command(BaseCommand):
                 failed = failed + 1
                 logger.warning("Coudn't connect to boleta API for: {}".format(info), exc_info=True)
             except Exception:
-                failed = failed + 1
+                failed = flogger.info(auth)ailed + 1
                 logger.warning("Error while processing boleta for: {}".format(info), exc_info=True)
         if not dry_run:
             # Check for errors and recover messages
