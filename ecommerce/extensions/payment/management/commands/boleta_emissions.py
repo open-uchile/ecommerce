@@ -74,7 +74,7 @@ class Command(BaseCommand):
                 failed = failed + 1
                 logger.warning("Coudn't connect to boleta API for: {}".format(info), exc_info=True)
             except Exception:
-                failed = flogger.info(auth)ailed + 1
+                failed = failed + 1
                 logger.warning("Error while processing boleta for: {}".format(info), exc_info=True)
         if not dry_run:
             # Check for errors and recover messages
