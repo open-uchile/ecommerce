@@ -149,7 +149,7 @@ class Webpay(EolBillingMixin, BasePaymentProcessor):
             raise WebpayTransactionDeclined(response['response_code'])
 
         # Record transaction data
-        basket.authorization_code = commited_response['authorization_code']
+        basket.authorization_code = commited_response['authorization_code'] or ""
         basket.save()
         self.record_processor_response(commited_response, basket=basket)
 
