@@ -128,8 +128,8 @@ class Command(BaseCommand):
                 continue
             order_number = venta["puntoVenta"]["rutCajero"]
             try:
-                aux = order_number.split('UA')
-                order_number = "UA-{}.".format(aux[1])
+                aux = order_number.split('OPEN')
+                order_number = "OPEN-{}.".format(aux[1])
             except Exception as e:
                 logger.error("Error get_boleta_emissions in order_number from rutCajero, error: {}".format(str(e)))
             prev = remote_boleta_orders.get(
@@ -150,7 +150,7 @@ class Command(BaseCommand):
                 boletas_data[item["id"]] = item
                 try:
                     aux = boletas_data[item["id"]]["puntoVenta"]["rutCajero"].split('UA')
-                    boletas_data[item["id"]]["puntoVenta"]["rutCajero"] = "UA-{}".format(aux[1])
+                    boletas_data[item["id"]]["puntoVenta"]["rutCajero"] = "OPEN-{}".format(aux[1])
                 except Exception as e:
                     logger.error("Error get_boleta_emissions in order_number from rutCajero, error: {}".format(str(e)))
             self.register_duplicates(remote_boleta_orders, boletas_data)
