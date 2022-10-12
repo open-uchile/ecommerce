@@ -81,7 +81,7 @@ class BoletaTests(BoletaMixin, TestCase):
             'Dummy_response', ['text', 'json', 'status_code'])
         response = Dummy_response("error", None, 404)
         self.assertRaises(BoletaElectronicaException, raise_boleta_error,
-                          response, Exception("test"), True, "OPEN-001")
+                          response, Exception("test"), True, "OP-001")
         self.assertEqual(1, BoletaErrorMessage.objects.all().count())
 
     def test_raise_boleta_error_save_json(self):
@@ -89,7 +89,7 @@ class BoletaTests(BoletaMixin, TestCase):
             'Dummy_response', ['text', 'json', 'status_code'])
         response = Dummy_response("error", lambda: {'test': 0}, 404)
         self.assertRaises(BoletaElectronicaException, raise_boleta_error,
-                          response, Exception("test"), True, "OPEN-001")
+                          response, Exception("test"), True, "OP-001")
         self.assertEqual(1, BoletaErrorMessage.objects.all().count())
 
     @responses.activate

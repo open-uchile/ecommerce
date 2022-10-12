@@ -1155,7 +1155,7 @@ class BoletaMixin:
             }
         )
 
-    def mock_boleta_get_boletas(self, since, status="INGRESADA", total=10, order_number="OPEN-100001", identificador_pos="secret"):
+    def mock_boleta_get_boletas(self, since, status="INGRESADA", total=10, order_number="OP-100001", identificador_pos="secret"):
         responses.add(
             method=responses.GET,
             url='https://ventas-test.uchile.cl/ventas-api-front/api/v1/ventas/?fecha-desde={}&estado={}&identificador-pos={}'.format(
