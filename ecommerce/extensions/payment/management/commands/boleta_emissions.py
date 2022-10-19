@@ -22,8 +22,8 @@ class Command(BaseCommand):
         Save authentication credentials on cache for half it's lifetime
         """
         auth = cache.get("boleta_emissions_auth_cache", None)
-        logger.info(auth)
         if auth == None or auth["expires_in"] < 20:
+            logger.info('inside if')
             auth = authenticate_boleta_electronica(basket=basket)
             cache.set("boleta_emissions_auth_cache", auth, auth["expires_in"]//2)
         return auth
