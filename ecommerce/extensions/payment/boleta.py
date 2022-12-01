@@ -283,7 +283,7 @@ def make_boleta_electronica(basket, order, auth, configuration=default_config, p
                 "descripcionAdicionalItem": itemDescription,
                 "identificadorProducto": course_product.id,
                 "impuesto": 0.0,
-                "indicadorExencion": 2,  # Se converso con C.Solis indicando que si el area contable solicita, es necesario cambiar este campo de 2 a 1 (Producto o servicio es exento o no afecto)
+                "indicadorExencion": 1,  # Se converso con C.Solis indicando que si el area contable solicita, es necesario cambiar este campo de 2 a 1 (Producto o servicio es exento o no afecto)
                 "nombreItem": itemName,
                 "precioUnitarioItem": unitPrice,
                 "unidadMedidaItem": "",
