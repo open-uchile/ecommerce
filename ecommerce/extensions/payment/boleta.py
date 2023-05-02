@@ -324,6 +324,7 @@ def make_boleta_electronica(basket, order, auth, configuration=default_config, p
         }],
     }
 
+    logger.info("Información de boleta para API Ventas: {}".format(data))
     # Opcional en nuestro caso (Servicio 3) aplica para comuna, direccion, ciudad
     if billing_info.billing_country_iso2 == "CL":
         data["datosBoleta"]["receptor"]["ciudad"] = billing_info.billing_city[:20]

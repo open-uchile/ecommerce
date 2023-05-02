@@ -68,6 +68,7 @@ class Command(BaseCommand):
                 if not dry_run:
                     auth = self.get_auth_from_cache(basket)
                     logger.info(auth)
+                    logger.info("Datos de auth: {}, Datos de basket: {}, Datos de order: {}, Procesador de pago: {}".format(auth, basket, order, payment_processor))
                     boleta_id = make_boleta_electronica(basket, order, auth, payment_processor=payment_processor)
                 completed = completed + 1
                 logger.info("Completed Boleta for order {}, user {}, amount CLP {}".format(order.number,basket.owner.username, order.total_incl_tax))
