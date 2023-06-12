@@ -23,6 +23,7 @@ class Command(BaseCommand):
         """
         auth = cache.get("boleta_emissions_auth_cache", None)
         if auth == None or auth["expires_in"] < 20:
+            logger.info('inside if')
             auth = authenticate_boleta_electronica(basket=basket)
             cache.set("boleta_emissions_auth_cache", auth, auth["expires_in"]//2)
         return auth
@@ -41,7 +42,7 @@ class Command(BaseCommand):
 
         dry_run = options["dry_run"]
         payment_processor = options["processor"]
-        
+
         completed = 0
         failed = 0
 
@@ -50,7 +51,7 @@ class Command(BaseCommand):
 
         if options["order_number"] is not None and len(options["order_number"]) > 0:
             orders = orders.filter(number__in=options["order_number"])
-        
+
         for order in orders:
             try:
                 # We re-check if there is a boleta associated to the basket via the userbillinginfo
@@ -60,14 +61,15 @@ class Command(BaseCommand):
                     continue
 
                 info = UserBillingInfo.objects.get(basket=order.basket, boleta=None, payment_processor=payment_processor)
-                
+
                 basket = info.basket
                 basket.strategy = strategy.Default()
 
                 if not dry_run:
                     auth = self.get_auth_from_cache(basket)
+                    logger.info(auth)
+                    logger.info("Datos de auth: {}, Datos de basket: {}, Datos de order: {}, Procesador de pago: {}".format(auth, basket, order, payment_processor))
                     boleta_id = make_boleta_electronica(basket, order, auth, payment_processor=payment_processor)
-                    
                 completed = completed + 1
                 logger.info("Completed Boleta for order {}, user {}, amount CLP {}".format(order.number,basket.owner.username, order.total_incl_tax))
             except requests.exceptions.ConnectionError:
@@ -103,4 +105,4 @@ class Command(BaseCommand):
                 error_messages.delete()
 
         logger.info("Completed {}, Failed {}, Total {}".format(completed,failed,completed+failed))
-        
+

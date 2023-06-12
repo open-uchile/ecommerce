@@ -73,8 +73,18 @@ class WebpayPaymentNotificationView(EolAlertMixin, EdxOrderPlacementMixin, View)
 
     def post(self, request):
         """Handle a notification received by Webpay with status update of a transaction"""
-        token = request.POST.get("token_ws",'')
-        logger.info("Payment token [%s] update received by Webpay", token)
+        if 'token_ws' in request.POST:
+            token = request.POST.get("token_ws",'')
+            logger.info("Payment token [%s] update received by Webpay", token)
+        elif 'TBK_TOKEN' in request.POST:
+            token = request.POST.get("TBK_TOKEN",'')
+            logger.info(request.POST)
+            logger.info("Payment token [%s] update received by Webpay", token)
+            return redirect(reverse('checkout:cancel-checkout'))
+        else:
+            logger.info('no existe token en el post')
+            raise Http404("Hubo un error al obtener los detalles desde Webpay.")
+
         try:
             payment = self.payment_processor.get_transaction_data(token)
             if not payment:
@@ -144,7 +154,7 @@ class WebpayPaymentNotificationView(EolAlertMixin, EdxOrderPlacementMixin, View)
                 request=request
             )
             self.handle_post_order(order)
-            
+
             # Order is created; then send email if enabled
             self.payment_processor.boleta_emission(basket, order, logger)
 
