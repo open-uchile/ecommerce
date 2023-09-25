@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 run(){
   python3 manage.py get_boleta_emissions "$1" --email && python3 manage.py boleta_emissions
