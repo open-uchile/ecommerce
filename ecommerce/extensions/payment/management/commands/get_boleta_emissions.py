@@ -40,7 +40,7 @@ class Command(BaseCommand):
             c = 0
             for boleta_id in boletas:
                 f.write("{},{},{},{},{},{}\n".format(
-                    data[boleta_id]["puntoVenta"][0]["rutCajero"],
+                    data[boleta_id]["puntoVenta"]["rutCajero"],
                     boleta_id,
                     data[boleta_id]["boleta"]["folio"],
                     data[boleta_id]["boleta"]["fechaEmision"],
