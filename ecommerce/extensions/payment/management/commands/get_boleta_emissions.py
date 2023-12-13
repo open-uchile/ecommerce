@@ -128,7 +128,7 @@ class Command(BaseCommand):
                 continue
             order_number = venta["puntoVenta"]["rutCajero"]
             try:
-                aux = order_number.split('OPEN')
+                aux = order_number.split('OP')
                 order_number = "OP-{}.".format(aux[1])
             except Exception as e:
                 logger.error("Error get_boleta_emissions in order_number from rutCajero, error: {}".format(str(e)))
